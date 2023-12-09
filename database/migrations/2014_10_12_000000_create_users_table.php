@@ -20,8 +20,7 @@ return new class extends Migration
             $table->string('password');
 
             $table->uuid('course_id')->nullable();
-            $table->boolean('isStudent')->default(false);
-            $table->boolean('isEmployee')->default(false);
+            $table->boolean('is_employee')->default(0);
             $table->timestamps();
         });
     }

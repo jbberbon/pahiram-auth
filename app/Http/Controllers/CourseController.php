@@ -16,25 +16,12 @@ class CourseController extends Controller
      */
     public function index()
     {
-        $user = Auth::user();
-
-        if ($user->isEmployee) {
-            $courses = Course::all();
-
-            return response([
-                'status' => true,
-                'data' => $courses,
-                'method' => "GET"
-            ], 200);
-        }
-
+        $courses = Course::all();
         return response([
-            'status' => false,
-            'message' => 'Unauthorized Access',
+            'status' => true,
+            'data' => $courses,
             'method' => "GET"
-        ], 401);
-
-
+        ], 200);
     }
 
     /**
@@ -42,24 +29,13 @@ class CourseController extends Controller
      */
     public function store(AddCourseRequest $request)
     {
-        $user = Auth::user();
-
-        if ($user->isEmployee) {
-            $validatedData = $request->validated();
-            Course::create($validatedData);
-            return response([
-                'status' => true,
-                'message' => "Added course successfully",
-                'method' => "POST"
-            ], 200);
-        }
-
+        $validatedData = $request->validated();
+        Course::create($validatedData);
         return response([
-            'status' => false,
-            'message' => 'Unauthorized Access',
+            'status' => true,
+            'message' => "Added course successfully",
             'method' => "POST"
-        ], 401);
-
+        ], 200);
     }
 
     /**
@@ -67,35 +43,25 @@ class CourseController extends Controller
      */
     public function show($courseId)
     {
-        $user = Auth::user();
-        if ($user->isEmployee) {
-            try {
-                /** 
-                 * Use findOrFail to explicitly throw an exception 
-                 * if the course is not found
-                 */
-                $course = Course::findOrFail($courseId);
+        try {
+            /** 
+             * Use findOrFail to explicitly throw an exception 
+             * if the course is not found
+             */
+            $course = Course::findOrFail($courseId);
 
-                return response([
-                    'status' => true,
-                    'data' => $course,
-                    'method' => 'GET',
-                ], 200);
-            } catch (ModelNotFoundException $e) {
-                return response([
-                    'status' => false,
-                    'message' => 'Course not found',
-                    'method' => 'GET',
-                ], 404);
-            }
+            return response([
+                'status' => true,
+                'data' => $course,
+                'method' => 'GET',
+            ], 200);
+        } catch (ModelNotFoundException $e) {
+            return response([
+                'status' => false,
+                'message' => 'Course not found',
+                'method' => 'GET',
+            ], 404);
         }
-
-        return response([
-            'status' => false,
-            'message' => 'Unauthorized Access',
-            'method' => "POST"
-        ], 401);
-
     }
 
     /**
@@ -103,40 +69,31 @@ class CourseController extends Controller
      */
     public function update(EditCourseRequest $request, $courseId)
     {
-        $user = Auth::user();
-        if ($user->isEmployee) {
-            try {
-                /** 
-                 * Use findOrFail to explicitly throw an exception 
-                 * if the course is not found
-                 */
-                $course = Course::findOrFail($courseId);
-                $validatedData = $request->validated();
+        try {
+            /** 
+             * Use findOrFail to explicitly throw an exception 
+             * if the course is not found
+             */
+            $course = Course::findOrFail($courseId);
+            $validatedData = $request->validated();
 
-                // Update the course
-                $course->update($validatedData);
-                $updatedCourse = Course::findOrFail($courseId);
+            // Update the course
+            $course->update($validatedData);
+            $updatedCourse = Course::findOrFail($courseId);
 
-                return response([
-                    'status' => true,
-                    'message' => 'Course updated successfully',
-                    'data' => $updatedCourse,
-                    'method' => 'PATCH',
-                ], 200);
-            } catch (ModelNotFoundException $e) {
-                return response([
-                    'status' => false,
-                    'message' => 'Course not found',
-                    'method' => 'PATCH',
-                ], 404);
-            }
+            return response([
+                'status' => true,
+                'message' => 'Course updated successfully',
+                'data' => $updatedCourse,
+                'method' => 'PATCH',
+            ], 200);
+        } catch (ModelNotFoundException $e) {
+            return response([
+                'status' => false,
+                'message' => 'Course not found',
+                'method' => 'PATCH',
+            ], 404);
         }
-
-        return response([
-            'status' => false,
-            'message' => 'Unauthorized Access',
-            'method' => "PATCH"
-        ], 401);
     }
 
     /**
@@ -144,34 +101,25 @@ class CourseController extends Controller
      */
     public function destroy($courseId)
     {
-        $user = Auth::user();
-        if ($user->isEmployee) {
-            try {
-                /** 
-                 * Use findOrFail to explicitly throw an exception 
-                 * if the course is not found
-                 */
-                $course = Course::findOrFail($courseId);
-                $course->delete();
+        try {
+            /** 
+             * Use findOrFail to explicitly throw an exception 
+             * if the course is not found
+             */
+            $course = Course::findOrFail($courseId);
+            $course->delete();
 
-                return response([
-                    'status' => true,
-                    'message' => 'Course deleted successfully',
-                    'method' => 'DELETE',
-                ], 200);
-            } catch (ModelNotFoundException $e) {
-                return response([
-                    'status' => false,
-                    'message' => 'Course not found',
-                    'method' => 'DELETE',
-                ], 404);
-            }
+            return response([
+                'status' => true,
+                'message' => 'Course deleted successfully',
+                'method' => 'DELETE',
+            ], 200);
+        } catch (ModelNotFoundException $e) {
+            return response([
+                'status' => false,
+                'message' => 'Course not found',
+                'method' => 'DELETE',
+            ], 404);
         }
-
-        return response([
-            'status' => false,
-            'message' => 'Unauthorized Access',
-            'method' => "POST"
-        ], 401);
     }
 }

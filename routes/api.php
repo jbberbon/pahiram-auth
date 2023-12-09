@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -22,20 +23,17 @@ Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
 // Protected Routes
-Route::group(['middleware' => ['auth:sanctum']], function() {
+Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/user/logout', [AuthController::class, 'logout']);
     Route::post('/user/logout-all-device', [AuthController::class, 'revokeAllTokens']);
 
     // CRUD {USERS & COURSES}
     Route::apiResource('/users', UserController::class);
-    Route::apiResource('/courses', CourseController::class);
+    Route::group(['middleware' => ['is_employee']], function () {
+        Route::apiResource('/courses', CourseController::class);
+    });
 });
 
 
-
-
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
 
 
