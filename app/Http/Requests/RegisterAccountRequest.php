@@ -20,7 +20,7 @@ class RegisterAccountRequest extends FormRequest
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
             'course_id' => ['required', 'string', new ExistsInCourses],
-            'isEmployee' => 'boolean'
+            'is_employee' => 'boolean'
         ];
     }
 
