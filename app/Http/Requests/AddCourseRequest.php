@@ -5,6 +5,7 @@ namespace App\Http\Requests;
 use App\Exceptions\RequestValidationFailed;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Validation\Rule;
 
 
 class AddCourseRequest extends FormRequest
@@ -15,6 +16,7 @@ class AddCourseRequest extends FormRequest
             'course_code' => 'required|string|unique:courses',
             'course' => 'required|string|unique:courses',
             'course_acronym' => 'required|string',
+            '*' => Rule::notIn(array_keys($this->rules())),
         ];
     }
     protected function failedValidation(Validator $validator)

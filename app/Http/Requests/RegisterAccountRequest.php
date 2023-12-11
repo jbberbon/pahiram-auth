@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 use App\Http\Rules\ExistsInCourses;
 use App\Exceptions\RequestValidationFailed;
@@ -20,7 +21,8 @@ class RegisterAccountRequest extends FormRequest
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8',
             'course_id' => ['required', 'string', new ExistsInCourses],
-            'is_employee' => 'boolean'
+            'is_employee' => 'boolean',
+            '*' => Rule::notIn(array_keys($this->rules())),
         ];
     }
 
