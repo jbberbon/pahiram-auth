@@ -6,7 +6,7 @@ use Exception;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use App\Utils\ValidatorReturnDataCleanup;
 
-class RequestValidationFailed extends Exception
+class RequestValidationFailedMsg extends Exception
 {
     /**
      * Throw an exception with validation errors.
@@ -20,9 +20,10 @@ class RequestValidationFailed extends Exception
      *
      * @throws \Illuminate\Http\Exceptions\HttpResponseException
      */
-    public static function errorResponse($validator, $message, $method, $errorCode)
+    public static function errorResponse($validator, $message, $errorCode)
     {
         $errors = $validator->errors()->get('*');
+        $method = request()->method();
         throw new HttpResponseException(
             response([
                 'status' => false,

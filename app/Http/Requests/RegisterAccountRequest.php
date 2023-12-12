@@ -4,14 +4,15 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 use App\Http\Rules\ExistsInCourses;
-use App\Exceptions\RequestValidationFailed;
+use App\Exceptions\RequestExtraPayloadMsg;
+use App\Exceptions\RequestValidationFailedMsg;
 
 
 class RegisterAccountRequest extends FormRequest
 {
+    private $errorCode = 422;
     public function rules()
     {
         return [
@@ -22,15 +23,21 @@ class RegisterAccountRequest extends FormRequest
             'password' => 'required|min:8',
             'course_id' => ['required', 'string', new ExistsInCourses],
             'is_employee' => 'boolean',
-            '*' => Rule::notIn(array_keys($this->rules())),
         ];
+    }
+
+    protected function passedValidation()
+    {
+        $request = $this->input();
+        $rules = $this->rules();
+        $errorCode = $this->errorCode;
+        RequestExtraPayloadMsg::errorResponse($request, $rules, $errorCode);
     }
 
     protected function failedValidation(Validator $validator)
     {
         $message = "Registration Failed";
-        $method = "POST";
-        $errorCode = 422;
-        RequestValidationFailed::errorResponse($validator, $message, $method, $errorCode);
+        $errorCode = $this->errorCode;
+        RequestValidationFailedMsg::errorResponse($validator, $message, $errorCode);
     }
 }
