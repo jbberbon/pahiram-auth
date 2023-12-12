@@ -26,7 +26,7 @@ class User extends Authenticatable
         'password',
         'apc_id',
         'course_id',
-        'is_employee'
+        // 'is_employee'
     ];
 
     /**
