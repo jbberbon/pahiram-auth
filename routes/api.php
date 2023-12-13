@@ -29,8 +29,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // CRUD {USERS & COURSES}
     Route::apiResource('/users', UserController::class);
+    Route::get('/courses', [CourseController::class, 'index']);
+
     Route::group(['middleware' => ['is_employee']], function () {
-        Route::apiResource('/courses', CourseController::class);
+        Route::get('/courses/{course}', [CourseController::class, 'show']);
+        Route::post('/courses', [CourseController::class, 'store']);
+        Route::patch('/courses/{course}', [CourseController::class, 'update']);
+        Route::delete('/courses/{course}', [CourseController::class, 'destroy']);
     });
 });
 
