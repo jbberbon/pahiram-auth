@@ -19,4 +19,8 @@ class Course extends Model
         'course_acronym'
     ];
 
+    protected $hidden = [
+        'created_at',
+        'updated_at'
+    ];
 }
