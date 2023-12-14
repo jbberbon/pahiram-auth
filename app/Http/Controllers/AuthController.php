@@ -72,7 +72,7 @@ class AuthController extends Controller
             'expires_at' => $expiration->toDateTimeString(),
         ];
 
-        $course = Course::where('id', $user['course_id']);
+        $course = $user->course;
 
         $response = [
             'status' => true,
