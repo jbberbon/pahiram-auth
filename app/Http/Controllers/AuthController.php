@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Models\Course;
 use App\Models\User;
 use App\Utils\CalculateTokenExpiration;
 use Illuminate\Http\Request;
@@ -71,11 +72,14 @@ class AuthController extends Controller
             'expires_at' => $expiration->toDateTimeString(),
         ];
 
+        $course = Course::where('id', $user['course_id']);
+
         $response = [
             'status' => true,
             'data' => [
                 'user' => $user,
-                'token' => $token_data,
+                'course' => $course,
+                'apcis_token' => $token_data,
             ],
             'method' => 'POST',
         ];
