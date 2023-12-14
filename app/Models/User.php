@@ -52,4 +52,10 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    // For FK constraint
+    public function course()
+    {
+        return $this->belongsTo(Course::class, 'course_id');
+    }
 }
