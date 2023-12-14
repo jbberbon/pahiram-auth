@@ -49,7 +49,8 @@ class AuthController extends Controller
         $validatedData = $request->validated();
 
         // Get user data
-        $user = User::with('course')->where('email', $request['email'])->first();
+        $user = User::where('email', $request['email'])->first();
+        $course = $user->course;
 
         // Check password
         if (!Hash::check($request['password'], $user->password)) {
@@ -72,10 +73,12 @@ class AuthController extends Controller
             'expires_at' => $expiration->toDateTimeString(),
         ];
 
+
         $response = [
             'status' => true,
             'data' => [
                 'user' => $user,
+                'course' => $course,
                 'apcis_token' => $token_data,
             ],
             'method' => 'POST',
