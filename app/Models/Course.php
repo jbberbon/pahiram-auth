@@ -24,11 +24,4 @@ class Course extends Model
         'created_at',
         'updated_at'
     ];
-
-    // For FK constraint
-    public function course()
-    {
-        return $this->belongsTo(Course::class, 'course_id');
-    }
-
 }

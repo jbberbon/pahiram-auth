@@ -72,13 +72,10 @@ class AuthController extends Controller
             'expires_at' => $expiration->toDateTimeString(),
         ];
 
-        $course = $user->course;
-
         $response = [
             'status' => true,
             'data' => [
                 'user' => $user,
-                'course' => $course,
                 'apcis_token' => $token_data,
             ],
             'method' => 'POST',

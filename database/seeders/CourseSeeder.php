@@ -17,13 +17,13 @@ class CourseSeeder extends Seeder
             [
                 "course_code" => "000",
                 "course" => "No Course",
-                "course_acronym" => "NO_COURSE",
+                "course_acronym" => "N/A",
 
             ],
             [
                 "course_code" => "001",
                 "course" => "BS in Information Technology With Specicialization in Mobile and Internet Technologies",
-                "course_acronym" => "BSIT_MI",
+                "course_acronym" => "BSIT-MI",
 
             ],
             [
