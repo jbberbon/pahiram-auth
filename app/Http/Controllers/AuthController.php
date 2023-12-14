@@ -73,7 +73,8 @@ class AuthController extends Controller
             'expires_at' => $expiration->toDateTimeString(),
         ];
 
-
+        // Remove Course data from $user
+        unset($user['course']);
         $response = [
             'status' => true,
             'data' => [
