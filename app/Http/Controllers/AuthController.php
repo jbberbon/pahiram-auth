@@ -49,7 +49,7 @@ class AuthController extends Controller
         $validatedData = $request->validated();
 
         // Get user data
-        $user = User::where('email', $request['email'])->first();
+        $user = User::with('course')->where('email', $request['email'])->first();
 
         // Check password
         if (!Hash::check($request['password'], $user->password)) {
