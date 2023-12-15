@@ -104,7 +104,7 @@ class AuthController extends Controller
     /**
      * Logout all devices
      */
-    public function revokeAllTokens()
+    public function logoutAllDevices()
     {
         $user = Auth::user();
         $user->tokens()->delete();
