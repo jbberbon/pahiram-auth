@@ -92,9 +92,6 @@ class AuthController extends Controller
      */
     public function logout(User $user)
     {
-        // Logout for all devices
-
-        $user = Auth::user();
         $user->currentAccessToken()->delete();
 
         return response([
