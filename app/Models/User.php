@@ -60,4 +60,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Course::class, 'course_id');
     }
+
+    public function getFullName()
+    {
+        return $this->first_name . ' ' . $this->last_name;
+    }
 }
