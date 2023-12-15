@@ -27,12 +27,13 @@ class UserController extends Controller
     /**
      * Display the specified user.
      */
-    public function show($userId)
+    public function show($apc_id)
     {
         try {
             // Use findOrFail to explicitly throw an exception 
             // if the user is not found
-            $user = User::findOrFail($userId);
+            // $user = User::findOrFail($apc_id);
+            $user = User::where('apc_id', $apc_id)->firstOrFail();
 
             return response([
                 'status' => true,
