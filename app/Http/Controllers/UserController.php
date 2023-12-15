@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\UserCollection;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 // use Illuminate\Http\Request;
@@ -18,7 +20,7 @@ class UserController extends Controller
 
         return response([
             'status' => true,
-            'data' => $users,
+            'data' => new UserCollection($users),
             'method' => "GET"
         ], 200);
     }
@@ -37,7 +39,7 @@ class UserController extends Controller
 
             return response([
                 'status' => true,
-                'data' => $user,
+                'data' => new UserResource($user),
                 'method' => 'GET',
             ], 200);
         } catch (ModelNotFoundException $e) {
