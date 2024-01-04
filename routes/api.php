@@ -32,7 +32,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/', [UserController::class, 'index']);
         Route::get('/{apc_id}', [UserController::class, 'show']);
         Route::delete('/{userId}', [UserController::class, 'destroy']);
-        Route::get('/user/search/{name}', [UserController::class, 'search']);
+        Route::get('/search/{name}', [UserController::class, 'search']);
     });
     Route::get('/courses', [CourseController::class, 'index']);
 

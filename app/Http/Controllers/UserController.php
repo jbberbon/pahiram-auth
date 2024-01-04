@@ -58,7 +58,7 @@ class UserController extends Controller
     public function search($name)
     {
         try {
-            $users = User::where('first_name', 'like', '%', $name . '%')
+            $users = User::where('first_name', 'like', '%' . $name . '%')
                 ->orWhere('last_name', 'like', '%' . $name . '%')
                 ->get();
 
