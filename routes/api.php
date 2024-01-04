@@ -28,7 +28,12 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/user/logout-all-device', [AuthController::class, 'revokeAllTokens']);
 
     // CRUD {USERS & COURSES}
-    Route::apiResource('/users', UserController::class);
+    Route::prefix('users')->group(function () {
+        Route::get('/', [UserController::class, 'index']);
+        Route::get('/{apc_id}', [UserController::class, 'show']);
+        Route::delete('/{userId}', [UserController::class, 'destroy']);
+        Route::get('/user/search/{name}', [UserController::class, 'search']);
+    });
     Route::get('/courses', [CourseController::class, 'index']);
 
     Route::group(['middleware' => ['is_employee']], function () {
