@@ -6,6 +6,7 @@ use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 // use Illuminate\Http\Request;
 // use Illuminate\Support\Facades\Auth;
 
@@ -50,6 +51,32 @@ class UserController extends Controller
             ], 404);
         }
     }
+
+    /**
+     * Search user.
+     */
+    public function search($name)
+    {
+        try {
+            $users = User::where('first_name', 'like', '%', $name . '%')
+                ->orWhere('last_name', 'like', '%' . $name . '%')
+                ->get();
+
+            return response([
+                'status' => true,
+                'data' => new UserCollection($users),
+                'method' => 'GET',
+            ], 200);
+        } catch (ModelNotFoundException $e) {
+            return response([
+                'status' => false,
+                'message' => 'Failed to search for user.',
+                'method' => 'GET',
+            ], 404);
+        }
+    }
+
+
 
     /**
      * Remove the specified resource from storage.

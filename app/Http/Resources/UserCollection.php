@@ -18,7 +18,7 @@ class UserCollection extends ResourceCollection
             return [
                 'apc_id' => $user->apc_id,
                 'full_name' => $user->getFullName(),
-                'email' => $user->email,
+                // 'email' => $user->email,
             ];
         })->all();
     }
