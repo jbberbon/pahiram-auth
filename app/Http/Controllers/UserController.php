@@ -57,9 +57,32 @@ class UserController extends Controller
      */
     public function search($name)
     {
+        // try {
+        //     $users = User::where('first_name', 'like', '%' . $name . '%')
+        //         ->orWhere('last_name', 'like', '%' . $name . '%')
+        //         ->get();
+
+        //     return response([
+        //         'status' => true,
+        //         'data' => new UserCollection($users),
+        //         'method' => 'GET',
+        //     ], 200);
+        // } catch (ModelNotFoundException $e) {
+        //     return response([
+        //         'status' => false,
+        //         'message' => 'Failed to search for user.',
+        //         'method' => 'GET',
+        //     ], 404);
+        // }
         try {
-            $users = User::where('first_name', 'like', '%' . $name . '%')
-                ->orWhere('last_name', 'like', '%' . $name . '%')
+            // Get the ID of the current user (assuming you have access to it)
+            $currentUserId = auth()->id();  // You may need to adjust this depending on your authentication setup
+
+            $users = User::where(function ($query) use ($name) {
+                $query->where('first_name', 'like', '%' . $name . '%')
+                    ->orWhere('last_name', 'like', '%' . $name . '%');
+            })
+                ->whereNotIn('id', [$currentUserId]) // Exclude the current user
                 ->get();
 
             return response([
