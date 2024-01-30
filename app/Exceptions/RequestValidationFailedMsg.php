@@ -8,18 +8,7 @@ use App\Utils\ValidatorReturnDataCleanup;
 
 class RequestValidationFailedMsg extends Exception
 {
-    /**
-     * Throw an exception with validation errors.
-     *
-     * @param object $validator
-     * @param string $message
-     * @param string $method
-     * @param int $errorCode
-     *
-     * @return void
-     *
-     * @throws \Illuminate\Http\Exceptions\HttpResponseException
-     */
+
     public static function errorResponse($validator, $message, $errorCode)
     {
         $errors = $validator->errors()->get('*');

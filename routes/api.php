@@ -27,7 +27,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/user/logout', [AuthController::class, 'logout']);
     Route::post('/user/logout-all-device', [AuthController::class, 'revokeAllTokens']);
 
-    // CRUD {USERS & COURSES}
+    // USERS
     Route::prefix('users')->group(function () {
         Route::get('/', [UserController::class, 'index']);
         Route::get('/{apc_id}', [UserController::class, 'show']);

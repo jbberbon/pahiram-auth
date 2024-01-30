@@ -33,9 +33,6 @@ class UserController extends Controller
     public function show($apc_id)
     {
         try {
-            // Use findOrFail to explicitly throw an exception 
-            // if the user is not found
-            // $user = User::findOrFail($apc_id);
             $user = User::where('apc_id', $apc_id)->firstOrFail();
 
             return response([
@@ -57,23 +54,6 @@ class UserController extends Controller
      */
     public function search($name)
     {
-        // try {
-        //     $users = User::where('first_name', 'like', '%' . $name . '%')
-        //         ->orWhere('last_name', 'like', '%' . $name . '%')
-        //         ->get();
-
-        //     return response([
-        //         'status' => true,
-        //         'data' => new UserCollection($users),
-        //         'method' => 'GET',
-        //     ], 200);
-        // } catch (ModelNotFoundException $e) {
-        //     return response([
-        //         'status' => false,
-        //         'message' => 'Failed to search for user.',
-        //         'method' => 'GET',
-        //     ], 404);
-        // }
         try {
             // Get the ID of the current user (assuming you have access to it)
             $currentUserId = auth()->id();  // You may need to adjust this depending on your authentication setup
@@ -83,6 +63,7 @@ class UserController extends Controller
                     ->orWhere('last_name', 'like', '%' . $name . '%');
             })
                 ->whereNotIn('id', [$currentUserId]) // Exclude the current user
+                ->where('email', 'not like', '%@student.apc.edu.ph%') // Exclude users that have @student.apc.edu.ph email
                 ->get();
 
             return response([
