@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\TemperatureController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,6 +18,11 @@ use App\Http\Controllers\UserController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
+
+// Machine Exercise 5
+Route::post('/temp', [TemperatureController::class, 'store']);
+Route::get('/temp/latest', [TemperatureController::class, 'latest'])->name('api.temp.latest');
+Route::get('/temp', [TemperatureController::class, 'index'])->name('api.temp.index');
 
 // Public Routes
 Route::post('/register', [AuthController::class, 'register']);
