@@ -42,7 +42,8 @@ class User extends Authenticatable
         'course_id',
         'password',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'course_id'
     ];
 
     /**
