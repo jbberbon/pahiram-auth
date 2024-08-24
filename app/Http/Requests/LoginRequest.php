@@ -18,7 +18,7 @@ class LoginRequest extends FormRequest
             'email' => [
                 'required',
                 'string',
-                'email',
+                // 'email',
                 'regex:/^[a-zA-Z0-9._%+-]+@(?:student\.)?apc\.edu\.ph$/',
             ],
             'password' => 'required|string',
