@@ -16,10 +16,10 @@ class LoginRequest extends FormRequest
     {
         return [
             'email' => [
-                'required', 
-                'string', 
-                'email', 
-                'regex:/^@(?:student\.)?apc\.edu\.ph$/'
+                'required',
+                'string',
+                'email',
+                'regex:/^[a-zA-Z0-9._%+-]+@(?:student\.)?apc\.edu\.ph$/',
             ],
             'password' => 'required|string',
             'remember_me' => 'boolean',
