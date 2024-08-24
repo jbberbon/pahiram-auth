@@ -23,21 +23,30 @@ class AuthController extends Controller
      */
     public function register(RegisterAccountRequest $request)
     {
-        $validatedData = $request->validated();
+        try {
+            $validatedData = $request->validated();
 
-        // Hash Password
-        $validatedData['password'] = Hash::make($validatedData['password']);
+            // Hash Password
+            $validatedData['password'] = Hash::make($validatedData['password']);
 
-        // Create a new user with the validated data
-        $user = User::create($validatedData);
+            // Create a new user with the validated data
+            $user = User::create($validatedData);
 
-        // Return a success response with the newly created user
-        return response([
-            'status' => true,
-            'message' => 'User created successfully',
-            'data' => $user,
-            'method' => 'POST'
-        ], 200);
+            // Return a success response with the newly created user
+            return response([
+                'status' => true,
+                'message' => 'User created successfully',
+                'data' => $user,
+                'method' => 'POST'
+            ], 200);
+        } catch (\Exception) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Something went wrong while registering your account',
+                'data' => $user,
+                'method' => 'POST'
+            ], 500);
+        }
 
     }
 
@@ -46,45 +55,53 @@ class AuthController extends Controller
      */
     public function login(LoginRequest $request)
     {
-        $validatedData = $request->validated();
+        try {
+            $validatedData = $request->validated();
 
-        // Get user data
-        $user = User::where('email', $request['email'])->first();
-        $course = $user->course;
+            // Get user data
+            $user = User::where('email', $request['email'])->first();
+            $course = $user->course;
 
-        // Check password
-        if (!Hash::check($request['password'], $user->password)) {
-            return response([
-                'status' => false,
-                'message' => 'Wrong password',
+            // Check password
+            if (!Hash::check($request['password'], $user->password)) {
+                return response()->json([
+                    'status' => false,
+                    'message' => 'Wrong credentials',
+                    'method' => 'POST',
+                ], 401);
+            }
+
+            // Determine Token expiration (rememberMe)
+            $expiration = CalculateTokenExpiration::calculateExpiration($validatedData['remember_me']);
+
+            // Generate token w/ the calculated expiration time
+            $token = $user->createToken('Pahiram-Token', ['*'], $expiration)->plainTextToken;
+
+            // Build Custom Token return data
+            $token_data = [
+                'access_token' => $token,
+                'expires_at' => $expiration->toDateTimeString(),
+            ];
+
+            // Remove Course data from $user
+            unset($user['course']);
+            $response = [
+                'status' => true,
+                'data' => [
+                    'user' => $user,
+                    'course' => $course,
+                    'apcis_token' => $token_data,
+                ],
                 'method' => 'POST',
-            ], 401);
+            ];
+            return response()->json($response, 200);
+        } catch (\Exception) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Something went wrong',
+                'method' => 'POST'
+            ], 500);
         }
-
-        // Determine Token expiration (rememberMe)
-        $expiration = CalculateTokenExpiration::calculateExpiration($validatedData['remember_me']);
-
-        // Generate token w/ the calculated expiration time
-        $token = $user->createToken('Pahiram-Token', ['*'], $expiration)->plainTextToken;
-
-        // Build Custom Token return data
-        $token_data = [
-            'access_token' => $token,
-            'expires_at' => $expiration->toDateTimeString(),
-        ];
-
-        // Remove Course data from $user
-        unset($user['course']);
-        $response = [
-            'status' => true,
-            'data' => [
-                'user' => $user,
-                'course' => $course,
-                'apcis_token' => $token_data,
-            ],
-            'method' => 'POST',
-        ];
-        return response($response, 200);
     }
 
     /**
@@ -92,13 +109,21 @@ class AuthController extends Controller
      */
     public function logout(User $user)
     {
-        $user->currentAccessToken()->delete();
+        try {
+            $user->currentAccessToken()->delete();
 
-        return response([
-            'status' => true,
-            'message' => 'Logged out',
-            'method' => 'DELETE'
-        ], 200);
+            return response()->json([
+                'status' => true,
+                'message' => 'Successfully logged out',
+                'method' => 'DELETE'
+            ], 200);
+        } catch (\Exception) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Something went wrong',
+                'method' => 'DELETE'
+            ], 500);
+        }
     }
 
     /**
@@ -106,14 +131,22 @@ class AuthController extends Controller
      */
     public function logoutAllDevices()
     {
-        $user = Auth::user();
-        $user->tokens()->delete();
+        try {
+            $user = Auth::user();
+            $user->tokens()->delete();
 
-        return response([
-            'status' => true,
-            'message' => 'Logged out for all devices',
-            'method' => 'DELETE'
-        ], 200);
+            return response()->json([
+                'status' => true,
+                'message' => 'Logged out for all devices',
+                'method' => 'DELETE'
+            ], 200);
+        } catch (\Exception) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Something went wrong',
+                'method' => 'DELETE'
+            ], 500);
+        }
 
     }
 }
