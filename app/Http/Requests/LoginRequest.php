@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
-use App\Http\Rules\ExistsInUsers;
+// use App\Http\Rules\ExistsInUsers; 
 use App\Exceptions\RequestExtraPayloadMsg;
 use App\Exceptions\RequestValidationFailedMsg;
 
@@ -15,8 +15,8 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => ['required', 'string', new ExistsInUsers],
-            'password' => 'required|string|min:8',
+            'email' => ['required', 'string', 'email', 'regex:/^[\w\.\-]+@apc\.edu\.ph$/'],
+            'password' => 'required|string',
             'remember_me' => 'boolean',
         ];
     }
@@ -32,7 +32,8 @@ class LoginRequest extends FormRequest
     public function failedValidation(Validator $validator)
     {
         $message = "Login Failed";
-        $errorCode = $this->errorCode;;
+        $errorCode = $this->errorCode;
+        ;
         RequestValidationFailedMsg::errorResponse($validator, $message, $errorCode);
     }
 }
