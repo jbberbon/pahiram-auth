@@ -19,11 +19,6 @@ use App\Http\Controllers\UserController;
 |
 */
 
-// Machine Exercise 5
-Route::post('/temp', [TemperatureController::class, 'store']);
-Route::get('/temp/latest', [TemperatureController::class, 'latest'])->name('api.temp.latest');
-Route::get('/temp', [TemperatureController::class, 'index'])->name('api.temp.index');
-
 // Public Routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -34,14 +29,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/user/logout-all-device', [AuthController::class, 'revokeAllTokens']);
 
     // USERS
-    Route::prefix('users')->group(function () {
+    Route::prefix('/users')->group(function () {
         Route::get('/', [UserController::class, 'index']);
         Route::get('/{apc_id}', [UserController::class, 'show']);
         Route::get('/exists/{apc_id}', [UserController::class, 'checkUserExists']);
         Route::delete('/{userId}', [UserController::class, 'destroy']);
         Route::get('/search/{name}', [UserController::class, 'search']);
     });
-    Route::get('/courses', [CourseController::class, 'index']);
 
     Route::group(['middleware' => ['is_employee']], function () {
         Route::get('/courses/{course}', [CourseController::class, 'show']);
