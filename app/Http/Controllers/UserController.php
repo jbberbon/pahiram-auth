@@ -50,6 +50,28 @@ class UserController extends Controller
     }
 
     /**
+     * Display the specified user.
+     */
+    public function checkUserExists($apc_id)
+    {
+        try {
+            $userExists = User::where('apc_id', $apc_id)->exists();
+
+            return response([
+                'status' => true,
+                'data' => $userExists,
+                'method' => 'GET',
+            ], 200);
+        } catch (ModelNotFoundException $e) {
+            return response([
+                'status' => false,
+                'message' => 'User not found',
+                'method' => 'GET',
+            ], 404);
+        }
+    }
+
+    /**
      * Search user.
      */
     public function search($name)
