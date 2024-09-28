@@ -50,7 +50,7 @@ class UserController extends Controller
     }
 
     /**
-     * Display the specified user.
+     * Check if user exists using apc_id
      */
     public function checkUserExists($apc_id)
     {

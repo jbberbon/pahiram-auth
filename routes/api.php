@@ -37,6 +37,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::prefix('users')->group(function () {
         Route::get('/', [UserController::class, 'index']);
         Route::get('/{apc_id}', [UserController::class, 'show']);
+        Route::get('/exists/{apc_id}', [UserController::class, 'checkUserExists']);
         Route::delete('/{userId}', [UserController::class, 'destroy']);
         Route::get('/search/{name}', [UserController::class, 'search']);
     });
