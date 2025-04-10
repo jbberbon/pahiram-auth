@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthControllerV2;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\TemperatureController;
 use Illuminate\Http\Request;
@@ -22,6 +23,9 @@ use App\Http\Controllers\UserController;
 // Public Routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
+Route::prefix('/v2')->group(function () {
+    Route::post('/login', [AuthControllerV2::class, 'login']);
+});
 
 // Protected Routes
 Route::group(['middleware' => ['auth:sanctum']], function () {
