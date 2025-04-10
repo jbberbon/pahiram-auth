@@ -93,11 +93,7 @@ class AuthControllerV2 extends Controller
             return response()->json($response, 200);
         } catch (\Exception) {
             DB::rollBack();
-            return response()->json([
-                'status' => false,
-                'message' => 'Something went wrong',
-                'method' => 'POST'
-            ], 500);
+            return response('', 500);
         }
     }
 
