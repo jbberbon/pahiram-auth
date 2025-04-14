@@ -3,11 +3,10 @@
 namespace App\Http\Controllers;
 
 
+use App\Http\Requests\LoginRequestV2;
 use App\Http\Resources\UserResourceForAuthV2;
-use App\Models\Course;
 use App\Models\User;
 use App\Utils\CalculateTokenExpiration;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -58,7 +57,7 @@ class AuthControllerV2 extends Controller
     /**
      * Login method
      */
-    public function login(LoginRequest $request)
+    public function login(LoginRequestV2 $request)
     {
         DB::beginTransaction();
         try {
@@ -73,7 +72,7 @@ class AuthControllerV2 extends Controller
             }
 
             // Determine Token expiration (rememberMe)
-            $expiration = CalculateTokenExpiration::calculateExpiration($validatedData['remember_me']);
+            $expiration = CalculateTokenExpiration::calculateExpiration($validatedData['rememberMe']);
 
             // Generate token w/ the calculated expiration time
             $token = $user->createToken('Pahiram-Token', ['*'], $expiration)->plainTextToken;
