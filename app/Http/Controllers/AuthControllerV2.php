@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\Http\Resources\UserResourceForAuthV2;
 use App\Models\Course;
 use App\Models\User;
 use App\Utils\CalculateTokenExpiration;
@@ -79,16 +80,16 @@ class AuthControllerV2 extends Controller
 
             // Build Custom Token return data
             $token_data = [
-                'access_token' => $token,
-                'expires_at' => $expiration->toDateTimeString(),
+                'accessToken' => $token,
+                'expiresAt' => $expiration->toDateTimeString(),
             ];
 
             // Remove Course data from $user
             unset($user['course']);
             DB::commit();
             $response = [
-                'user' => $user,
-                'apcis_token' => $token_data,
+                'user' => new UserResourceForAuthV2($user),
+                'apcisToken' => $token_data,
             ];
             return response()->json($response, 200);
         } catch (\Exception) {
